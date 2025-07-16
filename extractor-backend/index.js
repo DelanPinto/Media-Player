@@ -6,7 +6,14 @@ const cors = require('cors');
 const app = express();
 const PORT = 3001;
 
-app.use(cors());
+const allowedOrigins = [
+  'https://media-player-chi-ten.vercel.app',
+  'http://localhost:3000' // (optional, for local dev)
+];
+app.use(cors({
+  origin: allowedOrigins,
+  credentials: true // if you need cookies/auth
+}));
 app.use(express.json());
 
 // Helper: Find first video file URL in HTML
