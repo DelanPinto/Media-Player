@@ -18,7 +18,10 @@ app.use(express.json());
 
 // Explicit OPTIONS handler for CORS preflight
 app.options('*', (req, res) => {
-  res.header('Access-Control-Allow-Origin', allowedOrigins.join(','));
+  const origin = req.headers.origin;
+  if (allowedOrigins.includes(origin)) {
+    res.header('Access-Control-Allow-Origin', origin);
+  }
   res.header('Access-Control-Allow-Methods', 'GET,POST,OPTIONS');
   res.header('Access-Control-Allow-Headers', 'Content-Type');
   res.sendStatus(200);
