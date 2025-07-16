@@ -57,24 +57,35 @@ function extractVideoUrl(html, baseUrl) {
 
 app.post('/api/extract-video', async (req, res) => {
     const { url } = req.body;
-    // Set CORS header for POST requests
     const origin = req.headers.origin;
-    if (allowedOrigins.includes(origin)) {
-        res.header('Access-Control-Allow-Origin', origin);
+    const setCORS = () => {
+        if (allowedOrigins.includes(origin)) {
+            res.header('Access-Control-Allow-Origin', origin);
+        }
+    };
+    setCORS();
+    if (!url) {
+        setCORS();
+        return res.status(400).json({ error: 'Missing url' });
     }
-    if (!url) return res.status(400).json({ error: 'Missing url' });
     try {
         const response = await fetch(url, { headers: { 'User-Agent': 'Mozilla/5.0' } });
-        if (!response.ok) return res.status(400).json({ error: 'Failed to fetch page' });
+        if (!response.ok) {
+            setCORS();
+            return res.status(400).json({ error: 'Failed to fetch page' });
+        }
         const html = await response.text();
         const videoUrl = extractVideoUrl(html, url);
         if (videoUrl) {
-            res.json({ videoUrl });
+            setCORS();
+            return res.json({ videoUrl });
         } else {
-            res.status(404).json({ error: 'No video file found on page' });
+            setCORS();
+            return res.status(404).json({ error: 'No video file found on page' });
         }
     } catch (err) {
-        res.status(500).json({ error: 'Server error', details: err.message });
+        setCORS();
+        return res.status(500).json({ error: 'Server error', details: err.message });
     }
 });
 
