@@ -57,6 +57,11 @@ function extractVideoUrl(html, baseUrl) {
 
 app.post('/api/extract-video', async (req, res) => {
     const { url } = req.body;
+    // Set CORS header for POST requests
+    const origin = req.headers.origin;
+    if (allowedOrigins.includes(origin)) {
+        res.header('Access-Control-Allow-Origin', origin);
+    }
     if (!url) return res.status(400).json({ error: 'Missing url' });
     try {
         const response = await fetch(url, { headers: { 'User-Agent': 'Mozilla/5.0' } });
