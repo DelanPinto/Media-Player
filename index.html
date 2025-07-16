@@ -1485,6 +1485,7 @@
                     body: JSON.stringify({ url })
                 });
                 const data = await response.json();
+                console.log('Backend extract-video response:', data);
                 if (response.ok && data.videoUrl) {
                     showFeedback('Video found! Playing...');
                     if (mediaPlayer) {
@@ -1497,10 +1498,11 @@
                         playMedia();
                     }
                 } else {
-                    showFeedback(data.error || 'No video file found on page.');
+                    showFeedback('Failed to extract video: ' + (data.error || JSON.stringify(data) || 'No video file found on page.'));
                 }
             } catch (err) {
                 showFeedback('Error extracting video: ' + err.message);
+                console.error('Error extracting video:', err);
             }
         }
         function formatTime(seconds) {
