@@ -54,19 +54,7 @@
         /* CSS STYLES */
         /* Base Styles */
         /* ------------------------------------------------------- */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: "Gotham";
-        }
 
-        body {
-            font-family: "Gotham";
-            background-color: var(--background-color);
-            color: var(--text-color);
-            overflow: hidden;
-        }
 
         /* Player Container Styles */
         /* ------------------------------------------------------- */
@@ -2879,4 +2867,29 @@
         }
     </script>
 </body>
+</script>
+<script>
+// Example usage: place this inside a function or call it as needed
+async function extractVideoFromBackend(url) {
+    try {
+        // Use your deployed backend URL here
+        const response = await fetch('https://media-player-chi-ten-backend.vercel.app/api/extract-video', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ url })
+        });
+        const data = await response.json();
+        if (response.ok && data.videoUrl) {
+            // ...existing code to handle extracted videoUrl...
+            // Example: console.log('Extracted video URL:', data.videoUrl);
+        } else {
+            showFeedback('Failed to extract video: ' + (data.error || 'Unknown error'));
+        }
+    } catch (err) {
+        showFeedback('Error extracting video: ' + err.message);
+    }
+}
+</script>
 </html>
