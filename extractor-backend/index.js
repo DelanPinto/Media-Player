@@ -6,15 +6,23 @@ const cors = require('cors');
 const app = express();
 const PORT = 3001;
 
+
 const allowedOrigins = [
   'https://media-player-chi-ten.vercel.app',
   'http://localhost:3000' // (optional, for local dev)
 ];
 app.use(cors({
-  origin: allowedOrigins,
-  credentials: true // if you need cookies/auth
+  origin: allowedOrigins
 }));
 app.use(express.json());
+
+// Explicit OPTIONS handler for CORS preflight
+app.options('*', (req, res) => {
+  res.header('Access-Control-Allow-Origin', allowedOrigins.join(','));
+  res.header('Access-Control-Allow-Methods', 'GET,POST,OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Content-Type');
+  res.sendStatus(200);
+});
 
 // Helper: Find first video file URL in HTML
 function extractVideoUrl(html, baseUrl) {
