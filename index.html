@@ -1479,7 +1479,7 @@
             // Otherwise, treat as a web page and call backend
             showFeedback('Extracting video link from page...', 5000);
             try {
-                const response = await fetch('http://localhost:3001/api/extract-video', {
+                const response = await fetch('https://media-player-chi-ten-backend.vercel.app/api/extract-video', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ url })
